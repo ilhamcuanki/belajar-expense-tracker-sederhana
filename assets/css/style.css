@@ -1,0 +1,46 @@
+:root {
+    --primary: #10b981;
+    --primary-dark: #059669;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --success: #10b981;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+.navbar { background: var(--card); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
+.navbar a { text-decoration: none; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+.navbar a:hover { color: var(--primary); }
+.nav-links { display: flex; gap: 1.5rem; }
+
+.container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+.card { background: var(--card); padding: 1.5rem; border-radius: 0.75rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+h1, h2 { color: var(--primary-dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+
+form { display: grid; gap: 1rem; }
+.form-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
+.form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; }
+button.btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 0.5rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; }
+button.btn:hover { background: var(--primary-dark); }
+button.btn-sm { padding: 0.4rem 0.8rem; font-size: 0.875rem; }
+button.btn-danger { background: var(--danger); }
+
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+th { background: #f1f5f9; font-weight: 600; }
+.actions { display: flex; gap: 0.5rem; }
+
+.alert { padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.alert-success { background: #dcfce7; color: #166534; }
+.alert-danger { background: #fee2e2; color: #991b1b; }
+
+.progress-bar { background: #e2e8f0; height: 0.75rem; border-radius: 999px; overflow: hidden; margin-top: 0.5rem; }
+.progress-fill { height: 100%; background: var(--success); transition: width 0.3s ease; }
+.progress-fill.warn { background: var(--warning); }
+.progress-fill.over { background: var(--danger); }
