@@ -1,0 +1,55 @@
+<?php
+$pageTitle = "Jurnal Umum";
+require_once __DIR__ . '/../includes/header.php';
+$pdo = getDB();
+
+// Hapus transaksi jika ada request POST
+if (isset($_POST['hapus_id'])) {
+    $stmt = $pdo->prepare("DELETE FROM transaksi WHERE id = ?");
+    $stmt->execute([(int)$_POST['hapus_id']]);
+    setFlashMessage('success', 'Transaksi dihapus.');
+    header("Location: daftar.php"); exit;
+}
+
+// Filter pencarian
+$cari = sanitize($_GET['cari'] ?? '');
+$stmt = $pdo->prepare("SELECT t.*, k.nama as kategori_nama FROM transaksi t JOIN kategori k ON t.kategori_id = k.id WHERE t.deskripsi LIKE ? OR k.nama LIKE ? ORDER BY t.tanggal DESC");
+$stmt->execute(["%$cari%", "%$cari%"]);
+$transaksi = $stmt->fetchAll();
+?>
+
+<h1><i class="fa-solid fa-book-open"></i> Jurnal Umum</h1>
+<div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+    <form method="GET" style="flex:1; display:flex; gap:0.5rem;">
+        <input type="text" name="cari" placeholder="Cari deskripsi/kategori..." value="<?= htmlspecialchars($cari) ?>">
+        <button type="submit" class="btn btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+    </form>
+    <a href="tambah.php" class="btn btn-sm"><i class="fa-solid fa-plus"></i> Tambah Baru</a>
+</div>
+
+<div class="card">
+    <?php if (empty($transaksi)): ?>
+        <p style="color:var(--muted)">Belum ada transaksi.</p>
+    <?php else: ?>
+        <table>
+            <thead><tr><th>Tanggal</th><th>Kategori</th><th>Deskripsi</th><th style="text-align:right">Jumlah</th><th>Aksi</th></tr></thead>
+            <tbody>
+                <?php foreach ($transaksi as $t): ?>
+                    <tr>
+                        <td><?= date('d M Y', strtotime($t['tanggal'])) ?></td>
+                        <td><span class="badge" style="color:<?= $t['tipe']=='pemasukan'?'var(--success)':'var(--danger)' ?>"><?= htmlspecialchars($t['kategori_nama']) ?></span></td>
+                        <td><?= htmlspecialchars($t['deskripsi']) ?></td>
+                        <td style="text-align:right; font-weight:600"><?= formatRupiah($t['jumlah']) ?></td>
+                        <td class="actions">
+                            <form method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')">
+                                <input type="hidden" name="hapus_id" value="<?= $t['id'] ?>">
+                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
+<?php require_once __DIR__ . '/../includes/footer.php'; ?>
