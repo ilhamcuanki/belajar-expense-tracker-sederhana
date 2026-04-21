@@ -9,4 +9,4 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'db_expense_tracker');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('APP_URL', 'http://localhost/expense-tracker');
+define('APP_URL', 'http://localhost/git/expense-tracker');
