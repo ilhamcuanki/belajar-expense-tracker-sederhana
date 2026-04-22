@@ -23,3 +23,25 @@ function getFlashMessage(): string {
     }
     return '';
 }
+
+function uploadBukti($file, $folder) {
+    if (!isset($file['error']) || is_array($file['error'])) {
+        return ['success' => false, 'msg' => 'Upload tidak valid.'];
+    }
+    if ($file['error'] !== UPLOAD_ERR_OK) return ['success' => false, 'msg' => 'Gagal upload file.'];
+    if ($file['size'] > 2 * 1024 * 1024) return ['success' => false, 'msg' => 'Ukuran file maksimal 2MB.'];
+    
+    $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowed)) return ['success' => false, 'msg' => 'Format tidak didukung (jpg, png, webp).'];
+    
+    $dir = __DIR__ . '/uploads/' . $folder;
+    if (!is_dir($dir)) mkdir($dir, 0755, true);
+    
+    $filename = uniqid('img_', true) . '.' . $ext;
+    if (!move_uploaded_file($file['tmp_name'], $dir . '/' . $filename)) {
+        return ['success' => false, 'msg' => 'Gagal menyimpan file.'];
+    }
+    
+    return ['success' => true, 'filename' => $folder . '/' . $filename];
+}

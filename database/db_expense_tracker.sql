@@ -46,3 +46,33 @@ INSERT INTO kategori (nama, tipe) VALUES
 ('Transport', 'pengeluaran'),
 ('Hiburan', 'pengeluaran'),
 ('Tagihan', 'pengeluaran');
+
+-- 1. Tambah kolom bukti_foto ke tabel transaksi
+ALTER TABLE transaksi ADD COLUMN bukti_foto VARCHAR(255) NULL AFTER kategori_id;
+
+-- 2. Buat tabel Target Budgeting (Tabungan khusus)
+CREATE TABLE target_budget (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_target VARCHAR(100) NOT NULL,
+    gambar VARCHAR(255) NULL,
+    target_jumlah DECIMAL(12,2) NOT NULL CHECK (target_jumlah > 0),
+    terkumpul_jumlah DECIMAL(12,2) DEFAULT 0.00,
+    sumber_dana VARCHAR(50) NOT NULL, -- Contoh: "BCA", "GoPay", "Tunai"
+    status ENUM('aktif', 'tercapai', 'dibatalkan') DEFAULT 'aktif',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- 3. Buat tabel Riwayat Setor/Tarik Target
+CREATE TABLE target_riwayat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    target_id INT NOT NULL,
+    tipe ENUM('setor', 'tarik') NOT NULL,
+    jumlah DECIMAL(12,2) NOT NULL CHECK (jumlah > 0),
+    keterangan VARCHAR(150),
+    tanggal DATE NOT NULL,
+    FOREIGN KEY (target_id) REFERENCES target_budget(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 4. Tambah kategori "Lainnya" (hanya untuk pengeluaran sesuai permintaan)
+INSERT IGNORE INTO kategori (nama, tipe) VALUES ('Lainnya', 'pemasukan');
+INSERT IGNORE INTO kategori (nama, tipe) VALUES ('Lainnya', 'pengeluaran');

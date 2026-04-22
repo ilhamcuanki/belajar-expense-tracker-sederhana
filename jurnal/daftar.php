@@ -8,7 +8,8 @@ if (isset($_POST['hapus_id'])) {
     $stmt = $pdo->prepare("DELETE FROM transaksi WHERE id = ?");
     $stmt->execute([(int)$_POST['hapus_id']]);
     setFlashMessage('success', 'Transaksi dihapus.');
-    header("Location: daftar.php"); exit;
+    header("Location: daftar.php");
+    exit;
 }
 
 // Filter pencarian
@@ -32,12 +33,21 @@ $transaksi = $stmt->fetchAll();
         <p style="color:var(--muted)">Belum ada transaksi.</p>
     <?php else: ?>
         <table>
-            <thead><tr><th>Tanggal</th><th>Kategori</th><th>Deskripsi</th><th style="text-align:right">Jumlah</th><th>Aksi</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Kategori</th>
+                    <th>Deskripsi</th>
+                    <th style="text-align:right">Jumlah</th>
+                    <th>Aksi</th>
+                    <th style="width:80px">Bukti</th>
+                </tr>
+            </thead>
             <tbody>
                 <?php foreach ($transaksi as $t): ?>
                     <tr>
                         <td><?= date('d M Y', strtotime($t['tanggal'])) ?></td>
-                        <td><span class="badge" style="color:<?= $t['tipe']=='pemasukan'?'var(--success)':'var(--danger)' ?>"><?= htmlspecialchars($t['kategori_nama']) ?></span></td>
+                        <td><span class="badge" style="color:<?= $t['tipe'] == 'pemasukan' ? 'var(--success)' : 'var(--danger)' ?>"><?= htmlspecialchars($t['kategori_nama']) ?></span></td>
                         <td><?= htmlspecialchars($t['deskripsi']) ?></td>
                         <td style="text-align:right; font-weight:600"><?= formatRupiah($t['jumlah']) ?></td>
                         <td class="actions">
@@ -45,6 +55,15 @@ $transaksi = $stmt->fetchAll();
                                 <input type="hidden" name="hapus_id" value="<?= $t['id'] ?>">
                                 <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
                             </form>
+                        </td>
+                        <td>
+                            <?php if ($t['bukti_foto']): ?>
+                                <a href="<?= APP_URL ?>/uploads/<?= htmlspecialchars($t['bukti_foto']) ?>" target="_blank">
+                                    <img src="<?= APP_URL ?>/uploads/<?= htmlspecialchars($t['bukti_foto']) ?>" alt="Bukti" style="width:40px; height:40px; object-fit:cover; border-radius:6px; border:1px solid #e2e8f0;">
+                                </a>
+                            <?php else: ?>
+                                <span style="color:var(--muted); font-size:0.8rem">-</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

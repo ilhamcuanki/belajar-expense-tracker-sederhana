@@ -10,18 +10,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipe = sanitize($_POST['tipe']);
     $kategori_id = (int)$_POST['kategori_id'];
 
+    // Handle upload gambar
+    $bukti_path = null;
+    if (!empty($_FILES['bukti']['name'])) {
+        $upload = uploadBukti($_FILES['bukti'], 'jurnal');
+        if (!$upload['success']) {
+            setFlashMessage('danger', $upload['msg']);
+            header("Location: tambah.php");
+            exit;
+        }
+        $bukti_path = $upload['filename'];
+    }
+
     if (!$tanggal || !$deskripsi || !$jumlah || $jumlah <= 0 || !$kategori_id) {
         setFlashMessage('danger', 'Data transaksi tidak valid.');
     } else {
-        $stmt = $pdo->prepare("INSERT INTO transaksi (tanggal, deskripsi, jumlah, tipe, kategori_id) VALUES (?, ?, ?, ?, ?)");
-        if ($stmt->execute([$tanggal, $deskripsi, $jumlah, $tipe, $kategori_id])) {
+        $stmt = $pdo->prepare("INSERT INTO transaksi (tanggal, deskripsi, jumlah, tipe, kategori_id, bukti_foto) VALUES (?, ?, ?, ?, ?, ?)");
+        if ($stmt->execute([$tanggal, $deskripsi, $jumlah, $tipe, $kategori_id, $bukti_path])) {
             setFlashMessage('success', 'Transaksi berhasil dicatat.');
-            header("Location: daftar.php"); exit;
+            header("Location: daftar.php");
+            exit;
         }
     }
 }
 
-$kategori = $pdo->query("SELECT id, nama, tipe FROM kategori ORDER BY tipe, nama")->fetchAll();
+// Query kategori dengan "Lainnya" di bawah
+$kategori = $pdo->query("
+    SELECT id, nama, tipe FROM kategori 
+    ORDER BY FIELD(nama, 'Lainnya') ASC, tipe ASC, nama ASC
+")->fetchAll();
 ?>
 
 <h1><i class="fa-solid fa-plus"></i> Tambah Transaksi</h1>
@@ -56,6 +73,11 @@ $kategori = $pdo->query("SELECT id, nama, tipe FROM kategori ORDER BY tipe, nama
                 <?php endforeach; ?>
             </select>
         </div>
+        <div class="form-group">
+            <label><i class="fa-solid fa-camera"></i> Bukti Transaksi (Opsional)</label>
+            <input type="file" name="bukti" accept="image/*" class="file-input">
+            <small style="color:var(--muted)">Format: JPG, PNG, WEBP. Maksimal 2MB.</small>
+        </div>
         <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
     </form>
 </div>
@@ -68,6 +90,11 @@ $kategori = $pdo->query("SELECT id, nama, tipe FROM kategori ORDER BY tipe, nama
             if (opt.value === '') return;
             opt.style.display = opt.dataset.tipe === this.value ? '' : 'none';
         });
+    });
+        document.querySelector('.file-input').addEventListener('change', function(e) {
+        if(this.files && this.files[0]) {
+            console.log('File siap diupload:', this.files[0].name);
+        }
     });
 </script>
 
