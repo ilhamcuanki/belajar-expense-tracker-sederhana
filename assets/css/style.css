@@ -17,7 +17,14 @@ body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg);
 .navbar { background: var(--card); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); }
 .navbar a { text-decoration: none; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
 .navbar a:hover { color: var(--primary); }
-.nav-links { display: flex; gap: 1.5rem; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links > a { text-decoration: none; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s; }
+.nav-links > a:hover { color: var(--primary); }
+.nav-dropdown { position: relative; display: inline-flex; align-items: center; }
+.nav-dropdown-btn { background: none;border: none; cursor: pointer; font: inherit;/* Warisi font dari parent */ font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 0.5rem; padding: 0; transition: color 0.2s; }
+.nav-dropdown-btn:hover { color: var(--primary); }
+.dropdown-menu a { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; color: var(--text); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: background 0.2s, color 0.2s; }
+.dropdown-menu a:hover { background: #f1f5f9; color: var(--primary); }
 
 .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
 .card { background: var(--card); padding: 1.5rem; border-radius: 0.75rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
