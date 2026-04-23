@@ -24,7 +24,7 @@ if ($filter === 'harian') {
 
 // 2. QUERY AGREGASI DATA
 $stmt = $pdo->prepare("
-    SELECT k.nama as kategori_nama, t.tipe, SUM(t.jumlah) as total
+    SELECT k.nama as kategori_nama, t.tipe, SUM(t.jumlah) as total, COUNT(t.id) as jumlah_transaksi
     FROM transaksi t
     JOIN kategori k ON t.kategori_id = k.id
     WHERE t.tanggal BETWEEN ? AND ?
@@ -126,7 +126,7 @@ $format_tgl = date('d M Y', strtotime($mulai)) . ' - ' . date('d M Y', strtotime
                                 <?= ucfirst($row['tipe']) ?>
                             </span>
                         </td>
-                        <td style="text-align: right;">-</td> <!-- Bisa dikembangkan dengan COUNT() -->
+                        <td style="text-align: right;"><?= $row['jumlah_transaksi'] ?></td>
                         <td style="text-align: right; font-weight: 600;"><?= formatRupiah($row['total']) ?></td>
                     </tr>
                 <?php endforeach; ?>
