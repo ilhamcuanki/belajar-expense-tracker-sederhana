@@ -1,9 +1,9 @@
 <?php
 // config.php
+session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1); // Matikan di production
 date_default_timezone_set('Asia/Jakarta');
-session_start();
 
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'db_expense_tracker');
