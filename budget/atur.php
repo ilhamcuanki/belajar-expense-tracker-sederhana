@@ -1,6 +1,7 @@
 <?php
 // budget/atur.php
 $pageTitle = "Atur Budget";
+require_once __DIR__ . '/../auth/check_auth.php';
 require_once __DIR__ . '/../includes/header.php';
 $pdo = getDB();
 

@@ -1,5 +1,6 @@
 <?php
 // 1. Load konfigurasi & fungsi global DULU agar APP_URL dan session tersedia
+require_once __DIR__ . '/auth/check_auth.php';
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/functions.php';
 

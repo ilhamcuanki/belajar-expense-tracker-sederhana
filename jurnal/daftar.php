@@ -1,5 +1,6 @@
 <?php
 $pageTitle = "Jurnal Umum";
+require_once __DIR__ . '/../auth/check_auth.php';
 require_once __DIR__ . '/../includes/header.php';
 $pdo = getDB();
 

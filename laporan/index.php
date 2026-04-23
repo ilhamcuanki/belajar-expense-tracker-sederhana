@@ -1,6 +1,7 @@
 <?php
 // laporan/index.php
 $pageTitle = "Laporan Keuangan";
+require_once __DIR__ . '/../auth/check_auth.php';
 require_once __DIR__ . '/../includes/header.php';
 $pdo = getDB();
 
