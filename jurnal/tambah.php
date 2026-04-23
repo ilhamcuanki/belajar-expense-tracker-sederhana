@@ -43,7 +43,7 @@ $kategori = $pdo->query("
 
 <h1><i class="fa-solid fa-plus"></i> Tambah Transaksi</h1>
 <div class="card">
-    <form method="POST" class="validate-on-submit">
+    <form method="POST" enctype="multipart/form-data" class="validate-on-submit">
         <div class="form-group">
             <label>Tanggal</label>
             <input type="date" name="tanggal" required value="<?= date('Y-m-d') ?>">
