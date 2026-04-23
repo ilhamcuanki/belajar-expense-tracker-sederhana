@@ -76,3 +76,16 @@ CREATE TABLE target_riwayat (
 -- 4. Tambah kategori "Lainnya" (hanya untuk pengeluaran sesuai permintaan)
 INSERT IGNORE INTO kategori (nama, tipe) VALUES ('Lainnya', 'pemasukan');
 INSERT IGNORE INTO kategori (nama, tipe) VALUES ('Lainnya', 'pengeluaran');
+
+-- Login/Register
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- Akun Demo (Email: demo@expense.com | Password: password)
+INSERT INTO users (nama, email, password) VALUES 
+('User Demo', 'demo@expense.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
